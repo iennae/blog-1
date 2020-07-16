@@ -27,29 +27,16 @@ When you run the app, it shows the two endpoints like below, obviously:
 ![][image-01]
 
 
+## Installing NuGet Package ##
+
+First of all, install the NuGet package to enable Open API document feature onto the Azure Functions app.
+
+https://gist.github.com/justinyoo/2b4bc731ff8f2cdb5e80e28bd7dff9e7?file=02-install-nuget-package.sh
+
+
 ## Installing Boilerplate Codes ##
 
-Let's install the boilerplate codes. From my [previous post][post prev], I have to manually write the code for the Open API endpoints that generate Swagger document and UI. We don't have to that any longer. Run the following command to download the installer of your own choice. Let's assume that the downloaded location is `scripts` of the project root. Here's the PowerShell command:
-
-https://gist.github.com/justinyoo/2b4bc731ff8f2cdb5e80e28bd7dff9e7?file=02-download-installer.ps1
-
-This is the Bash command. Once you download the script, you have to make it executable by setting the permission (line #5).
-
-https://gist.github.com/justinyoo/2b4bc731ff8f2cdb5e80e28bd7dff9e7?file=04-set-permission.sh&highlights=5
-
-Now, we've got the installation script. Let's run the one to install the boilerplate code. Here's the PowerShell script.
-
-https://gist.github.com/justinyoo/2b4bc731ff8f2cdb5e80e28bd7dff9e7?file=05-install-boilerplate.ps1
-
-If you want to install it for Azure Functions v1 app, you should add the `-IsVersion1` switch at the end.
-
-https://gist.github.com/justinyoo/2b4bc731ff8f2cdb5e80e28bd7dff9e7?file=06-install-boilerplate-v1.ps1
-
-Here's the Bash script.
-
-https://gist.github.com/justinyoo/2b4bc731ff8f2cdb5e80e28bd7dff9e7?file=07-install-boilerplate.sh
-
-Now, we have the boilerplate codes in place. You don't need to touch anything on the boilerplate code unless you really want to do something. Build the app and run it locally. Then, you'll be able to see the additional three endpoints that represent Open API document and UI.
+In fact, we don't need to do anything further to write the boilerplate codes any longer. Therefore, simply build the app and run it locally. Then, you'll be able to see the additional three endpoints that represent Open API document and UI.
 
 ![][image-02]
 
