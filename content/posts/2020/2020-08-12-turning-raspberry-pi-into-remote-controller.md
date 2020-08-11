@@ -128,11 +128,11 @@ If you're unlucky, you'll get the following error message. Yeah, it's me.
 
 ![][image-05]
 
-It's because both the IR sender and receiver are active. At this time, we only need the receiver, which is for capturing the IR signals. Disable the sender part. Open the bootloader.
+It's because both the IR sender and receiver are active at the same time. For this exercise, we only need the receiver, which is for capturing the IR signals. Disable the sender part. Open the bootloader.
 
 https://gist.github.com/justinyoo/34e3470ced2641221c69ebeab6e034f7?file=13-modify-boot-config.sh
 
-We used to have both `gpio-ir` and `gpio-ir-tx` activated. As we don't need the sender part, for now, update the file like below (line #5-6).
+We used to have both `gpio-ir` and `gpio-ir-tx` activated. As we don't need the sender part for now, update the file like below (line #5-6).
 
 https://gist.github.com/justinyoo/34e3470ced2641221c69ebeab6e034f7?file=14-boot-config.sh&highlights=5-6
 
@@ -141,7 +141,6 @@ Once completed, reboot Raspberry PI using the command, `sudo reboot`. Once it's 
 https://gist.github.com/justinyoo/34e3470ced2641221c69ebeab6e034f7?file=11-lircd-stop.sh
 
 ![][image-04]
-
 
 Then, run the following command so that you can confirm it works.
 
@@ -189,7 +188,7 @@ Remote controllers have been registered. Open the bootloader for the update.
 
 https://gist.github.com/justinyoo/34e3470ced2641221c69ebeab6e034f7?file=21-modify-boot-config.sh
 
-Update the IR sender part (line #5-6).
+Reactivate the IR sender part by uncommenting the line (line #5-6).
 
 https://gist.github.com/justinyoo/34e3470ced2641221c69ebeab6e034f7?file=22-boot-config.sh&highlights=5-6
 
@@ -226,11 +225,11 @@ Can you see the TV being turned on and off?
 
 https://youtu.be/QoUmSVAxBCs
 
-<br/>Unfortunately, I can't make my air-conditioner be working. I might have incorrectly captured the IR signal for the air-conditioner. But TV works, instead! To me, the air-conditioner was the top priority, though. I should spend more time to get it working. If I have a more sophisticated device to capture the IR signal, it would be better.
+<br/>Unfortunately, I can't make my air-conditioner be working. I might have incorrectly captured the IR signal for the air-conditioner. But the TV works, at least! To me, the air-conditioner was the top priority, though. I should spend more time to get it working. If I have a more sophisticated device to capture the IR signal, it would be better.
 
 ---
 
-So far, we have walked through how [Raspberry PI][rpi] turns into a remote controller that turns on and off home appliances. In the next post, I'll build a [Power App][pw apps] and [Power Automate][pw automate] that talks to [Azure Functions][az func] app to access to the remote controller (Raspberry PI) outside the home network.
+So far, we have walked through how [Raspberry PI][rpi] turns into a remote controller that switches on and off multiple home appliances. In the next post, I'll build a [Power App][pw apps] and [Power Automate][pw automate] that talks to an [Azure Functions][az func] app to access to the remote controller (Raspberry PI) from outside the home network.
 
 
 [image-01]: https://sa0blogs.blob.core.windows.net/devkimchi/2020/08/turning-raspberry-pi-into-remote-controller-01.png
