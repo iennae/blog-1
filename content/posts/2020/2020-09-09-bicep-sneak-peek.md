@@ -15,22 +15,28 @@ fullscreen: true
 
 Microsoft has recently revealed an [ARM Template][az arm template] DSL (Domain Specific Language), called [Bicep][gh bicep] to help devs build ARM templates quicker and easier.
 
-Amongst several ways to provision resources onto [Azure][az], [ARM template][az arm template] is one popular approach for DevOps engineers. However, many DevOps engineers have been providing feedback that ARM template is hard to learn and deploy at scales, as it can be tricky. Therefore, field experts like Microsoft MVPs have suggested many best practices about authoring ARM templates, but it's still the big hurdle to get through.
+There are several ways of provisioning resources onto [Azure][az] &ndash; via [Azure Portal][az portal], or [PowerShell][az pwsh] or [Azure CLI][az cli], or [Azure SDKs][az sdk] in different languages, which all leverages [Azure Resource Manager REST APIs][az arm rest]. [ARM template][az arm template] is one popular approach for DevOps engineers. However, many DevOps engineers have been providing feedback that ARM template is hard to learn and deploy at scales, as it can be tricky. Therefore, field experts like Microsoft MVPs have suggested many best practices about authoring ARM templates and share them through [Azure Quickstart Templates][az arm quickstart] or their own social platform. But it's still the big hurdle to get through.
 
-As of this writing, it's v0.1, which is a very early preview. It means there will be many improvements until it becomes v1.0. Throughout this post, I'm going to discuss its expressions and how it can ease the ARM template authoring fatigues.
+As of this writing, it's v0.1, which is a very early preview. It means there will be many improvements until it becomes v1.0 including some potential breaking changes. Throughout this post, I'm going to discuss its expressions and how it can ease the ARM template authoring fatigues.
 
-> The sample `.bicep` file used for this post can be fount at this [GitHub repository][gh sample].
+> The sample `.bicep` file used for this post can be found at this [GitHub repository][gh sample].
 
 **DO NOT USE BICEP ON YOUR PRODUCTION UNTIL IT GOES TO V0.3**
 
 
 ## ARM Template Skeleton Structure ##
 
-ARM template has the basic structure like below:
+ARM template is a JSON file that follows a specific format. A basic template looks like:
 
 https://gist.github.com/justinyoo/f3605100c5bfe7f7c7bd32f2d5fd1eb2?file=01-arm-template.json
 
-Those `parameters`, `variables`, `resources` and `outputs` attributes are as nearly as mandatory, so Bicep supports those attributes first. One of the problems that the ARM template structure currently has is the location to declare parameters, variables and resources. They MUST be sitting inside `parameters`, `variables` and `resources` sections, respectively, which is not as flexible as other programming languages. But Bicep has successfully sorted out this issue. Let's discuss this flexibility later on this post.
+Those `parameters`, `variables`, `resources` and `outputs` attributes are as nearly as mandatory, so Bicep supports those attributes first. Due to this JSON syntax, there have been several issues for authoring.
+
+* First, it's easy to incorrectly write the JSON template once the resource goes complex.
+* Second, due to this complex structure, the readability gets dramatically reduced.
+* Third but not the last, `parameters`, `variables`, `resources` and `outputs` MUST be defined within their declared sections, respectively, which is not as flexible as other programming languages.
+
+But Bicep has successfully sorted out those issues. Let's have a look how Bicep copes with it.
 
 
 ## Bicep Parameters ##
@@ -98,14 +104,20 @@ Let's compare the result between the [original ARM template][az arm template man
 
 ---
 
-So far, we have had a quick look at the early preview of the [Bicep][gh bicep] project. It was pretty impressive from the usability point of view and has improved developer experiences way better. Please play around this tool and feel the difference by authoring the Bicep file.
+So far, we have had a quick look at the early preview of the [Bicep][gh bicep] project. It was pretty impressive from the usability point of view and has improved developer experiences way better. Interested in trying out Bicep? You can take a first look with the [Bicep Playground][az bicep playground]!
 
 
 [gh sample]: https://github.com/devkimchi/LiveStream-VM-Setup-Sample/blob/main/bicep/azuredeploy.bicep
 [gh bicep]: https://github.com/Azure/bicep
 
 [az]: https://azure.microsoft.com/?WT.mc_id=devkimchicom-blog-juyoo
+[az portal]: https://azure.microsoft.com/features/azure-portal/?WT.mc_id=devkimchicom-blog-juyoo
+[az pwsh]: https://docs.microsoft.com/powershell/azure/new-azureps-module-az?view=azps-4.6.1&WT.mc_id=devkimchicom-blog-juyoo
+[az cli]: https://docs.microsoft.com/cli/azure/what-is-azure-cli?view=azure-cli-latest&WT.mc_id=devkimchicom-blog-juyoo
+[az sdk]: https://azure.microsoft.com/downloads/?WT.mc_id=devkimchicom-blog-juyoo
 
+[az arm rest]: https://docs.microsoft.com/rest/api/resources/?WT.mc_id=devkimchicom-blog-juyoo
+[az arm quickstart]: https://azure.microsoft.com/resources/templates/?WT.mc_id=devkimchicom-blog-juyoo
 [az arm template]: https://docs.microsoft.com/azure/azure-resource-manager/templates/overview?WT.mc_id=devkimchicom-blog-juyoo
 [az arm template manual]: https://github.com/devkimchi/LiveStream-VM-Setup-Sample/blob/main/azuredeploy.json
 [az arm template bicep]: https://github.com/devkimchi/LiveStream-VM-Setup-Sample/blob/main/bicep/azuredeploy.json
@@ -115,3 +127,4 @@ So far, we have had a quick look at the early preview of the [Bicep][gh bicep] p
 [az arm validation providers]: https://docs.microsoft.com/azure/azure-resource-manager/templates/test-cases?WT.mc_id=devkimchicom-blog-juyoo#use-hardcoded-api-version
 
 [az bicep install]: https://github.com/Azure/bicep/blob/master/docs/installing.md
+[az bicep playground]: https://aka.ms/bicepdemo
