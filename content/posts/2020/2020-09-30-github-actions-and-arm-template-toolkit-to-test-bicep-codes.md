@@ -13,31 +13,31 @@ cover: https://sa0blogs.blob.core.windows.net/devkimchi/2020/09/github-actions-a
 fullscreen: true
 ---
 
-Let's have a look at the Project Bicep and ARM Template Toolkit, and GitHub Actions for both.
+Let's look at the Project Bicep and ARM Template Toolkit, and GitHub Actions for both.
 
 * [Project Bicep Sneak Peek][post prev]
 * ***GitHub Actions and ARM Template Toolkit for Bicep Codes Linting***
 
-Once we build an ARM template, we need to verify whether the template is written in a proper way or will be working as expected. I wrote a couple of blog posts, [#1][post pester 1] and [#2][post pester 2], using [Pester][pester] for ARM Template validation. However, that approach required us to log in to Azure first, which was doable but less desirable. What if we can verify the template without having to log in to Azure?
+Once you build an ARM template, you need to verify whether the template is written in a proper way and that it works as expected. In earlier blog posts, [#1][post pester 1] and [#2][post pester 2], I described using [Pester][pester] for ARM Template validation. However, that approach required you to log in to Azure first, which is doable but less desirable. What if you could verify the template without having to log in to Azure?
 
-In my [previous post][post prev], I introduced the [Project Bicep][gh bicep] that build ARM templates way easier. Throughout this post, I'm going to discuss [ARM Template Toolkit (ARM-TTK)][az arm ttk] to lint and validate the templates, and how this process can be applied to our CI/CD pipelines using the [GitHub Actions][gh actions] workflow.
+In my [previous post][post prev], I introduced the [Project Bicep][gh bicep] to simplify building ARM templates. In this post, I'm going to discuss [ARM Template Toolkit (ARM-TTK)][az arm ttk] to lint and validate the templates, and applying this process  to your CI/CD pipelines using the [GitHub Actions][gh actions] workflow.
 
 > The sample Bicep code used in this post can be downloaded from this [GitHub repository][gh sample].
 
 
 ## ARM Template Toolkit (ARM TTK) ##
 
-[ARM Template Toolkit(ARM TTK)][az arm ttk] offers consistent and standard ways of coding practices to build ARM templates with much more readability that includes:
+The [ARM Template Toolkit(ARM TTK)][az arm ttk] offers a consistent and standard coding practices to build ARM templates with increased readability including:
 
 * Validating the author's intentions by eliminating unused parameters and variables,
 * Applying security practices like outputting secrets in plain text format, and
 * Using environment functions to provide constants like domain suffixes, rather than hard-coded values.
 
-[ARM TTK is written in PowerShell][gh arm ttk], as of writing this post, it's v0.3. As PowerShell supports cross-platform, ARM TTK can also run on Windows, Mac and Linux boxes.
+As of this post, [ARM TTK is written in PowerShell][gh arm ttk] is v0.3. As PowerShell supports cross-platform, ARM TTK can also run on Windows, Mac and Linux boxes.
 
 ![][image-01]
 
-> In order to use ARM TTK, I'd recommend cloning the [GitHub repository][gh arm ttk] rather than downloading the artifact linked from the [official document][az arm ttk] because the repository gets regularly updated in a fast pace.
+> In order to use ARM TTK, I recommend cloning the [GitHub repository][gh arm ttk] to get the latest version rather than downloading the artifact linked from the [official document][az arm ttk] because the repository gets regularly updated at a fast pace.
 
 
 ## Run ARM TTK against Templates ##
@@ -46,41 +46,41 @@ First of all, run the bicep CLI to build the ARM template.
 
 https://gist.github.com/justinyoo/0acf46566623e346553b5dabe5c1fe5b?file=01-bicep-build.ps1
 
-Then, run the following PowerShell command. Please note that, if you want to test all ARM templates in a specific directory, there **MUST** be either `azuredeploy.json` or `maintemplate.json` in the directory; otherwise ARM TTK will complain it.
+Then, run the following PowerShell command. Please note that, if you want to test all ARM templates in a specific directory, there **MUST** be either an `azuredeploy.json` or `maintemplate.json` in the directory; otherwise ARM TTK will complain.
 
 https://gist.github.com/justinyoo/0acf46566623e346553b5dabe5c1fe5b?file=02-run-arm-ttk.ps1
 
-The result after running ARM TTK might look like below. I've got my template using the old API version. For example, Azure Storage Account uses the API version of `2017-10-01`, which is older than two years. It complains that I **SHOULD** use the newest version of `2019-06-01`.
+After I run these commands on my project, I get the following warnings showing that my template uses the old API version. For example, Azure Storage Account uses the API version of `2017-10-01`, which is older than two years. It complains that I **SHOULD** use the newest version of `2019-06-01`.
 
 ![][image-02]
 
-After fixing all the complaints and running ARM TTK again, it passes all the linting!
+After fixing all the complaints and running ARM TTK again, my project passes all the linting!
 
 ![][image-03]
 
 
 ## Run GitHub Actions for Bicep CLI and ARM TTK on CI/CD Pipelines ##
 
-We've got all bicep CLI and ARM TTK working in our local machine. Let's run both bicep CLI and ARM TTK on CI/CD pipelines. There are two GitHub Actions for both.
+Now that you have the bicep CLI and ARM TTK working in your local machine, you can also add the bicep CLI and ARM TTK to your CI/CD pipelines. There are two GitHub Actions for both.
 
 * [Bicep Build][gh actions bicep]
 * [ARM TTK][gh actions arm ttk]
 
-After applying those actions to the CI/CD pipeline, it might look like the following:
+Here is an example of adding these actions to a CI/CD pipeline:
 
 https://gist.github.com/justinyoo/0acf46566623e346553b5dabe5c1fe5b?file=03-github-actions.yaml&highlights=15-18,20-24,26-30
 
 1. All the `.bicep` files are compiled to ARM templates through the Bicep Build action (line #15-18).
 2. Lint those converted ARM templates through the ARM TTK action (line #20-24).
-3. Display the result generated from the ARM TTK action. As the ARM TTK action returns an output as a JSON object format, we can leverage the JSON object to generate test reports (line #26-30).
+3. Display the result generated from the ARM TTK action. As the ARM TTK action returns an output as a JSON object format, you can leverage the JSON object to generate test reports (line #26-30).
 
-Now, by following this workflow, we can easily build the `.bicep` files and verify them. Then only passed templates can provision resources to Azure.
+Now, using this workflow, you can easily build the `.bicep` files and verify them so that only passing templates will provision resources to Azure.
 
-But, we should make sure one thing. Before running ARM TTK, the ARM template worked perfectly fine. However, ARM TTK complained that it was not compliant. It means that ARM TTK doesn't validate what the provisioning result will be, but do check the code quality. Therefore, to check whether the resources declared in the template will be provisioned or not, we still need other testing logic, discussed in the previous posts [#1][post pester 1] and [#2][post pester 2].
+But, you should make sure of one thing. Before running ARM TTK, the ARM template worked perfectly fine. However, ARM TTK complained that it was not compliant. It means that while the ARM TTK checks code quality, it doesn't validate the provisioning outcome. Therefore, to check whether the resources declared in the template will be provisioned or not, you still need additional testing logic as provided by Pester as discussed in the previous posts [#1][post pester 1] and [#2][post pester 2].
 
 ---
 
-So far, we've set up the CI/CD pipeline with [Bicep CLI][gh actions bicep] and [ARM TTK][gh actions arm ttk] to build and verify the `.bicep` files. Can you play them around on your own pipelines?
+So far, you've set up the CI/CD pipeline with [Bicep CLI][gh actions bicep] and [ARM TTK][gh actions arm ttk] to build and verify the `.bicep` files. Can you try them out on some of your own pipelines?
 
 
 [image-01]: https://sa0blogs.blob.core.windows.net/devkimchi/2020/09/github-actions-and-arm-template-toolkit-to-test-bicep-codes-01.png
